@@ -1,0 +1,10 @@
+name: MacLogger
+version: '${version}'
+main: com.maclogger.MacLogger
+api-version: '1.20'
+softdepend: [PlayerPoints]
+authors: [AjMaacc]
+commands:
+  mlog:
+    usage: </command>
+    description: Logs message to a file
