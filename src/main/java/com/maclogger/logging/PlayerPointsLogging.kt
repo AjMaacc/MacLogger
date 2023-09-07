@@ -1,7 +1,7 @@
 package com.maclogger.logging
 
+import com.maclogger.MacLogger
 import com.maclogger.MacLogger.Companion.log
-import com.maclogger.MacLogger.Companion.logger
 import com.maclogger.MacLogger.Companion.ppAPI
 import org.black_ixx.playerpoints.event.PlayerPointsChangeEvent
 import org.bukkit.Bukkit
@@ -24,12 +24,12 @@ class PlayerPointsLogging : Listener {
         val time = localDate.format(formatter)
         val diff = "%,d".format(ppAPI?.look(uuid)?.plus(change))
         if (change >= 0){
-            log("PlayerPoints", "[$time] [+] $name | $currentPoints points -> $diff points")
-            logger().info("Logged PlayerPoints change!")
+            log("PlayerPoints", "[$time] [+] $name | $currentPoints points -> $diff points (+$change)")
         }
         else {
-            log("PlayerPoints", "[$time] [-] $name | $currentPoints points -> $diff points")
-            logger().info("Logged PlayerPoints change!")
+            log("PlayerPoints", "[$time] [-] $name | $currentPoints points -> $diff points ($change)")
         }
+        MacLogger.ppUpdates++
+        MacLogger.saveVars()
     }
 }
