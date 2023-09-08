@@ -34,7 +34,7 @@ class MacLogger : JavaPlugin() {
         var ppAPI: PlayerPointsAPI? = null
         var purchases = 0
         var ppUpdates = 0
-        fun logger(): Logger {
+        private fun logger(): Logger {
             return Bukkit.getLogger()
         }
 
@@ -74,7 +74,6 @@ class MacLogger : JavaPlugin() {
             val countFile = File(directory, countFileName)
 
             if (!countFile.exists()) {
-                // Create the YAML file with an initial "count" value
                 val data = mapOf("gsCount" to 0, "ppUpdates" to 0)
                 val yamlOptions = DumperOptions()
                 yamlOptions.defaultFlowStyle = DumperOptions.FlowStyle.BLOCK
@@ -97,28 +96,17 @@ class MacLogger : JavaPlugin() {
             val directoryPath = Bukkit.getServer().pluginManager.getPlugin("MacLogger")?.dataFolder
             val yaml = Yaml(DumperOptions().apply { defaultFlowStyle = DumperOptions.FlowStyle.BLOCK })
             val filePath = Paths.get(directoryPath.toString(), "data.yml")
-
-            try {
-                // Read the existing YAML content
+            return try {
                 val content = Files.readString(filePath)
-
-                // Parse the YAML content into a map
                 val data = (yaml.load<Map<String, Any>>(content) ?: mutableMapOf()).toMutableMap()
-
-                // Update the "count" variable with the new value
                 data["gsCount"] = purchases
                 data["ppUpdates"] = ppUpdates
-
-                // Dump the updated data to YAML format
                 val updatedYamlContent = yaml.dump(data)
-
-                // Write the updated content back to the file
                 Files.write(filePath, updatedYamlContent.toByteArray(), StandardOpenOption.CREATE)
-
-                return true
+                true
             } catch (e: IOException) {
                 println("Error updating YAML file: ${e.message}")
-                return false
+                false
             }
         }
     }
